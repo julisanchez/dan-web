@@ -1,4 +1,4 @@
-const PagoTransferenciaForm = () => (
+const PagoTransferenciaForm = ({ state, handleChanges }) => (
   <div>
     <div className="mb-2">
       <label htmlFor="cbuOrigen" className="form-label">
@@ -6,7 +6,8 @@ const PagoTransferenciaForm = () => (
       </label>
       <input
         id="cbuOrigen"
-        name="cbuOrigen"
+        value={state.cbuOrigen}
+        onChange={handleChanges("cbuOrigen")}
         type="text"
         className="form-control"
       />
@@ -17,7 +18,8 @@ const PagoTransferenciaForm = () => (
       </label>
       <input
         id="cbuDestino"
-        name="cbuDestino"
+        value={state.cbuDestino}
+        onChange={handleChanges("cbuDestino")}
         type="text"
         className="form-control"
       />
@@ -28,7 +30,8 @@ const PagoTransferenciaForm = () => (
       </label>
       <input
         id="codigoTran"
-        name="codigoTran"
+        value={state.codigoTransferencia}
+        onChange={handleChanges("codigoTransferencia")}
         type="number"
         className="form-control"
       />

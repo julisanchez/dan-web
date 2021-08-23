@@ -1,4 +1,4 @@
-const PagoChequeForm = () => (
+const PagoChequeForm = ({ state, handleChanges }) => (
   <div>
     <div className="mb-2">
       <label htmlFor="nroCheque" className="form-label">
@@ -6,7 +6,8 @@ const PagoChequeForm = () => (
       </label>
       <input
         id="nroCheque"
-        name="nroCheque"
+        value={state.nroCheque}
+        onChange={handleChanges("nroCheque")}
         type="number"
         className="form-control"
       />
@@ -16,9 +17,10 @@ const PagoChequeForm = () => (
         Fecha de cobro
       </label>
       <input
-        type="date"
-        name="fechaCobro"
         id="fechaCobro"
+        value={state.fechaCobro}
+        onChange={handleChanges("fechaCobro")}
+        type="date"
         className="form-control"
       />
     </div>
@@ -26,7 +28,13 @@ const PagoChequeForm = () => (
       <label htmlFor="banco" className="form-label">
         Banco
       </label>
-      <input id="banco" name="banco" type="text" className="form-control" />
+      <input
+        id="banco"
+        value={state.banco}
+        onChange={handleChanges("banco")}
+        type="text"
+        className="form-control"
+      />
     </div>
   </div>
 );

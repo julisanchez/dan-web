@@ -1,4 +1,4 @@
-const RegistroObrasForm = ({state, handleChange, onSubmit}) => {
+const RegistroObrasForm = ({state, handleChange, handleTipoChange, onSubmit}) => {
   const _onSubmit = (e) => {
     e.preventDefault();
     onSubmit(state);
@@ -22,14 +22,13 @@ const RegistroObrasForm = ({state, handleChange, onSubmit}) => {
         </div>
         <div className="mb-2">
           <label htmlFor="tipoObra">Tipo de obra</label>
-          <select
+          <input
             id="tipoObra"
-            value={state.tipoObra}
-            onChange={handleChange("tipoObra")}
+            value={state.tipo.descripcion}
+            onChange={handleTipoChange}
+            type="text"
             className="form-control"
-          >
-            <option value=""></option>
-          </select>
+          />
         </div>
         <div className="mb-2">
           <label htmlFor="latitud" className="form-label">

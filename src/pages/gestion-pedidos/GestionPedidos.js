@@ -1,50 +1,110 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import RegistrarPedidoForm from "./RegistrarPedidoForm";
+import { useAlert } from "react-alert";
+import ReactLoading from "react-loading";
+import { obtenerProductos } from "../../dao/ProductoDao";
+import { registrarPedido } from "../../dao/PedidoDao";
+import ProductosList from "./ProductosList";
+import CarroTable from "./CarroTable";
+import handleError from "../../utils/handleError";
+
 const GestionPedidos = () => {
-  const [state, setState] = useState({});
+  const alert = useAlert();
+
+  const [formState, setFormState] = useState({
+    fechaPedido: "",
+    obra: { id: "" },
+  });
+  const [carroState, setCarroState] = useState([]);
+  const { productos, isLoading } = useProductos();
 
   const handleChange = (item) => (e) => {
-    setState({ [item]: e.target.value });
+    setFormState({ ...formState, [item]: e.target.value });
   };
 
-  const onSubmit = (e) => {
-    e.preventDefault();
+  const handleObraId = (e) => {
+    setFormState({ ...formState, obra: { id: parseInt(e.target.value) } });
+  };
+
+  const onSubmit = (formData) => {
+    const data = { ...formData, detalle: carroState };
+
+    console.log(data);
+
+    registrarPedido(data)
+      .then((res) => {
+        console.log(res);
+
+        alert.success("Pedido creado!");
+      })
+      .catch((err) => {
+        handleError(err, alert);
+      });
+  };
+
+  const onAdd = (data) => {
+    var carroTemp = [...carroState];
+
+    const index = carroTemp.findIndex((e) => e.producto.id === data.producto.id);
+
+    if (index !== -1)
+      carroTemp[index] = {
+        ...data,
+        cantidad: carroTemp[index].cantidad + data.cantidad,
+      };
+    else carroTemp.push(data);
+
+    setCarroState(carroTemp);
   };
 
   return (
-    <main className="container shadow rounded p-3 text-start bg-white">
-      <form onSubmit={onSubmit}>
-        <h1 className="h3 mb-3 fw-normal">Registrar pedido</h1>
-        <div className="mb-2">
-          <label htmlFor="obraId" className="form-label">
-            Obra Id
-          </label>
-          <input
-            id="obraId"
-            value={state.obraId}
-            type="text"
-            className="form-control"
-          />
+    <>
+      {carroState.length > 0 && (
+        <>
+          <div className="mb-3">
+            <RegistrarPedidoForm
+              state={formState}
+              handleChange={handleChange}
+              handleObraId={handleObraId}
+              onSubmit={onSubmit}
+            />
+          </div>
+          <CarroTable data={carroState} />
+        </>
+      )}
+      {isLoading ? (
+        <div className="d-flex justify-content-center align-items-center">
+          <ReactLoading type="cubes" color="00695c" />
         </div>
-        <div className="mb-2">
-          <label htmlFor="fechaPedido" className="form-label">
-            Fecha de pedido
-          </label>
-          <input
-            id="fechaPedido"
-            value={state.fechaPedido}
-            onChange={handleChange("fechaPedido")}
-            className="form-control"
-            type="date"
-          />
-        </div>
-        {/*
-              TODO: Mostrar tabla de pedidos, cada producto tiene descripcion, 
-              precio y se debe ingresar cantidad para comprar
-           */}
-        <input type="submit" value="Registrar" className="btn btn-primary" />
-      </form>
-    </main>
+      ) : (
+        <ProductosList data={productos} onAdd={onAdd} />
+      )}
+    </>
   );
 };
+
+function useProductos() {
+  const [productos, setProductos] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsLoading(true);
+
+      try {
+        const response = await obtenerProductos();
+        setProductos(response.data);
+
+        setIsLoading(false);
+      } catch (e) {
+        console.log(e);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  return { productos, isLoading };
+}
 
 export default GestionPedidos;

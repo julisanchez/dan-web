@@ -1,60 +1,44 @@
-import React, { component, useEffect, useState } from "react";
+import React, { useState } from "react";
 import MedioPagoForm from "./medio-pago/MedioPagoForm";
 
-function usePagos(props) {
-  const [pagos, setPagos] = useState([]);
+const RegistrarPagoForm = ({
+  state,
+  handleChanges,
+  handleClienteChanges,
+  handleMedioChanges,
+  defaultMedio,
+  onMedioChange,
+  onSubmit,
+}) => {
+  const [medio, setMedio] = useState(defaultMedio);
 
-  useEffect(() => {
-    setPagos([]);
-  });
-}
+  const _onMedioChange = (event) => {
+    const medio = event.target.value;
 
-const RegistrarPagoForm = (props) => {
-  const [state, setState] = useState({
-    fechaPago: "",
-    cliente: {
-      id: "",
-    },
-    medio: {
-      observacion: "",
-
-      nroRecibo:"",
-
-      cbuOrigen:"",
-      cbuDestino:"",
-      codigoTransferencia: "",
-
-      nroCheque:"",
-      fechaCobro:"",
-      banco: ""
-    },
-  });
-  const [medio, setMedio] = useState("efectivo");
-
-  const handleChanges = (item) => (e) => {
-    setState({ [item]: e.target.value });
+    onMedioChange(medio);
+    setMedio(medio);
   };
 
-  const onSubmit = (event) => {
+  const _onSubmit = (event) => {
     event.preventDefault();
-    props.onSubmit();
+    onSubmit(state);
   };
 
   return (
     <div className="container shadow rounded-3 p-3 text-start bg-white">
-      <form onSubmit={onSubmit}>
+      <form onSubmit={_onSubmit}>
         <h1 className="h3 mb-3 fw-normal">Registrar pago</h1>
-        <div className="mb-2">
-          <label htmlFor="fechaPago" className="form-label">
-            Fecha de pago
-          </label>
-          <input id="fechaPago" type="date" className="form-control" />
-        </div>
         <div className="mb-2">
           <label htmlFor="clienteId" className="form-label">
             Cliente Id
           </label>
-          <input id="clienteId" type="text" className="form-control" />
+          <input
+            id="clienteId"
+            state={state.cliente.id}
+            onChange={handleClienteChanges("id")}
+            type="number"
+            className="form-control"
+          />
         </div>
         <div className="mb-2">
           <label htmlFor="observacion" className="form-label">
@@ -62,8 +46,8 @@ const RegistrarPagoForm = (props) => {
           </label>
           <input
             id="observacion"
-            value={state.observacion}
-            onChange={handleChanges("observacion")}
+            value={state.medio.observacion}
+            onChange={handleMedioChanges("observacion")}
             type="text"
             className="form-control"
           />
@@ -76,14 +60,18 @@ const RegistrarPagoForm = (props) => {
             id="medioPago"
             name="medioPago"
             className="form-control"
-            onChange={(event) => setMedio(event.target.value)}
+            onChange={_onMedioChange}
           >
             <option value="efectivo">Efectivo</option>
             <option value="cheque">Cheque</option>
             <option value="transferencia">Transferencia</option>
           </select>
         </div>
-        <MedioPagoForm medio={medio} />
+        <MedioPagoForm
+          medio={medio}
+          state={state.medio}
+          handleChanges={handleMedioChanges}
+        />
         <input type="submit" value="Pagar" className="btn btn-primary" />
       </form>
     </div>

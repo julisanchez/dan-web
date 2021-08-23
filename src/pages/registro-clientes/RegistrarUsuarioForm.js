@@ -21,7 +21,7 @@ const RegistrarUsuarioForm = (props) => {
               onChange={handleChange("user")}
               type="text"
               className="form-control"
-              required
+          
             ></input>
           </div>
           <div className="mb-2">
@@ -34,7 +34,7 @@ const RegistrarUsuarioForm = (props) => {
               onChange={handleChange("password")}
               type="password"
               className="form-control"
-              required
+            
             ></input>
           </div>
           <button onClick={previousStep} className="btn btn-secundary">

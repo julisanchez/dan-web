@@ -1,5 +1,4 @@
-import Axios from "axios";
-import React, { useState } from "react";
+import React from "react";
 
 const RegistroClientesForm = (props) => {
   const { state, handleChange, nextStep } = props;

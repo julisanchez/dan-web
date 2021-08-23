@@ -1,15 +1,17 @@
-import logo from "./logo.svg";
 import "./App.css";
 import Login from "./pages/login/Login.js";
 import RegistroClientes from "./pages/registro-clientes/RegistroClientes";
 import RegistroObras from "./pages/registro-obras/RegistroObras";
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Route} from "react-router-dom";
 import AltaProducto from "./pages/registro-productos/AltaProducto";
 import GestionPedidos from "./pages/gestion-pedidos/GestionPedidos";
 import GestionPagos from "./pages/gestion-pagos/GestionPagos";
 import NavBar from "./components/NavBar";
+import axios from "axios";
 
 function App() {
+  axios.defaults.baseURL = "http://localhost:9100";
+
   return (
     <div className="App">
       <Router>

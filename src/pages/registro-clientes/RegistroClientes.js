@@ -2,9 +2,14 @@ import RegistroClientesForm from "./RegistroClientesForm";
 import React, { useState } from "react";
 import RegistroObrasForm from "../registro-obras/RegistroObrasForm";
 import RegistrarUsuarioForm from "./RegistrarUsuarioForm";
+import { registrarCliente } from "../../dao/UsuariosDao";
+import { useAlert } from "react-alert";
+import handleError from "../../utils/handleError";
 
-const RegistroClientes = (props) => {
-  const [state, setState] = useState({
+const RegistroClientes = () => {
+  const alert = useAlert();
+
+  const defaultState = {
     razonSocial: "",
     cuit: "",
     mail: "",
@@ -17,14 +22,16 @@ const RegistroClientes = (props) => {
     obras: [
       {
         descripcion: "",
-        tipoObra: "",
+        tipo: { descripcion: "" },
         latitud: "",
         longitud: "",
         direccion: "",
         superficie: "",
       },
     ],
-  });
+  };
+
+  const [state, setState] = useState(defaultState);
 
   const [step, setStep] = useState(1);
 
@@ -47,8 +54,26 @@ const RegistroClientes = (props) => {
     setState(temp);
   };
 
-  const handleObraSubmit = (data) => {
-    props.onSubmit(state);
+  const handleTipoObraChange = (e) => {
+    const temp = { ...state };
+    temp.obras[0] = { ...temp.obras[0], tipo: { descripcion: e.target.value } };
+    setState(temp);
+  };
+
+  const handleSubmit = () => {
+    console.log(state);
+
+    registrarCliente(state)
+      .then((res) => {
+        console.log(res);
+
+        alert.success("Cliente creado!");
+        setStep(1);
+        setState(defaultState);
+      })
+      .catch((err) => {
+        handleError(err, alert);
+      });
   };
 
   const nextStep = () => {
@@ -82,9 +107,12 @@ const RegistroClientes = (props) => {
         <RegistroObrasForm
           state={state.obras[0]}
           handleChange={handleObraChange}
-          onSubmit={handleObraSubmit}
+          handleTipoChange={handleTipoObraChange}
+          onSubmit={handleSubmit}
         />
       );
+    default:
+      console.log("Step desconocido");
   }
 };
 export default RegistroClientes;

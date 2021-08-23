@@ -1,42 +1,30 @@
 import "./signin.css";
-import { useForm } from "react-hook-form";
+import React, { useState } from "react";
+import LoginForm from "./LoginForm";
+import { logear } from "../../dao/UsuariosDao";
+import { useAlert } from "react-alert";
 
 const Login = (props) => {
-  const { register, handleSubmit } = useForm();
+  const alert = useAlert();
+
+  const [state, setState] = useState({ user: "", password: "" });
+
+  const handleChange = (input) => (event) => {
+    setState({ ...state, [input]: event.target.value });
+  };
 
   const onSubmit = (data) => {
-    props.onSubmit(data);
+    logear(state)
+      .then((res) => {
+        alert.success(res);
+      })
+      .catch((err) => {
+        alert.error(err.message);
+      });
   };
 
   return (
-    <main className="form-signin d-flex justify-content-center align-items-center">
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <h1 className="h3 mb-3 fw-normal">Login</h1>
-        <div className="form-floating">
-          <input
-            id="user"
-            {...register("user")}
-            type="email"
-            className="form-control"
-          ></input>
-          <label htmlFor="user">User</label>
-        </div>
-        <div className="form-floating">
-          <input
-            id="password"
-            {...register("password")}
-            type="password"
-            className="form-control"
-          ></input>
-          <label htmlFor="password">Password:</label>
-        </div>
-        <input
-          type="submit"
-          value="Submit"
-          className="w-100 btn btn-lg btn-primary"
-        ></input>
-      </form>
-    </main>
+    <LoginForm state={state} handleChange={handleChange} onSubmit={onSubmit} />
   );
 };
 
