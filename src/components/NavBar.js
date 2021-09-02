@@ -1,10 +1,10 @@
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 const NavBar = () => (
   <div className="nav nav-pills bg-dark">
     <li className="nav-item">
-      <Link to="/login" className="nav-link text-white">
+      <NavLink to="/login" className="nav-link text-white">
         Login
-      </Link>
+      </NavLink>
     </li>
     <li className="nav-item dropdown">
       <a
@@ -16,31 +16,45 @@ const NavBar = () => (
       </a>
       <ul className="dropdown-menu">
         <li>
-          <Link to="/registro-clientes" className="dropdown-item">
+          <NavLink to="/registro-clientes" className="dropdown-item">
             Cliente
-          </Link>
+          </NavLink>
         </li>
         <li>
-          <Link to="/registro-obras" className="dropdown-item">
+          <NavLink to="/registro-obras" className="dropdown-item">
             Obra
-          </Link>
+          </NavLink>
         </li>
         <li>
-          <Link to="/alta-producto" className="dropdown-item">
+          <NavLink to="/registro-blog" className="dropdown-item">
+            Articulo
+          </NavLink>
+        </li>
+        <li>
+          <NavLink to="/alta-producto" className="dropdown-item">
             Alta de productos
-          </Link>
+          </NavLink>
         </li>
       </ul>
     </li>
     <li className="nav-item">
-      <Link to="/gestion-pedidos" className="nav-link text-white">
+      <NavLink
+        to="/gestion-pedidos"
+        activeClassName="active"
+        className="nav-link text-white"
+      >
         Pedidos
-      </Link>
+      </NavLink>
     </li>
     <li className="nav-item">
-      <Link to="/gestion-pagos" className="nav-link text-white">
+      <NavLink to="/gestion-pagos" className="nav-link text-white">
         Pagos
-      </Link>
+      </NavLink>
+    </li>
+    <li className="nav-item">
+      <NavLink to="/blog" className="nav-link text-white">
+        Blog
+      </NavLink>
     </li>
   </div>
 );
