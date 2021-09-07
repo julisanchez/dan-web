@@ -25,6 +25,7 @@ export default function Articulo() {
       ) : (
         <div className="container shadow rounded-3 p-3 text-start bg-white">
           <h1>{articulo.titulo}</h1>
+          <p>{articulo.fechaPublicacion}</p>
           <p>{articulo.descripcion}</p>
           {secciones()}
           <p>{articulo.autor}</p>
